@@ -1,0 +1,20 @@
+<%- include('partials/head', { title }) %>
+<body class="login-page">
+  <form method="POST" action="/admin/login" class="login-card">
+    <h1>Sign in</h1>
+    <p class="sub">Gravity Construction admin</p>
+
+    <%- include('partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <label>
+      <span>Email</span>
+      <input type="email" name="email" value="<%= typeof email !== 'undefined' ? email : '' %>" required autocomplete="email" autofocus />
+    </label>
+    <label>
+      <span>Password</span>
+      <input type="password" name="password" required autocomplete="current-password" />
+    </label>
+    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+  </form>
+</body>
+</html>

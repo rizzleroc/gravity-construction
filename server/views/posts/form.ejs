@@ -1,0 +1,72 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1><%= row ? 'Edit post' : 'New post' %></h1>
+      <a class="btn btn-ghost" href="/admin/posts">← Back</a>
+    </div>
+
+    <form method="POST" action="<%= action %>" enctype="multipart/form-data" class="card">
+      <div class="grid grid-2">
+        <label>
+          <span>Title</span>
+          <input type="text" name="title" required value="<%= row ? row.title : '' %>" />
+        </label>
+        <label>
+          <span>Slug (auto from title if blank)</span>
+          <input type="text" name="slug" value="<%= row ? row.slug : '' %>" />
+        </label>
+      </div>
+
+      <label>
+        <span>Excerpt (1–2 sentence teaser)</span>
+        <textarea name="excerpt" rows="2"><%= row && row.excerpt ? row.excerpt : '' %></textarea>
+      </label>
+
+      <label>
+        <span>Body (HTML allowed — sanitized on save)</span>
+        <textarea name="body" rows="14"><%= row && row.body ? row.body : '' %></textarea>
+        <small class="muted" style="display:block; margin-top:.35rem;">
+          Allowed tags include headings, paragraphs, lists, links, images, blockquote, figure.
+        </small>
+      </label>
+
+      <label>
+        <span>Hero image</span>
+        <% if (row && row.hero_image) { %>
+          <div style="margin-bottom:.5rem;">
+            <img src="<%= row.hero_image %>" alt="" style="max-width: 320px; border-radius: var(--radius); border:1px solid var(--line);" />
+            <div style="margin-top:.5rem;">
+              <label style="display:inline-flex; align-items:center; gap:.4rem; margin:0; font-size:.9rem;">
+                <input type="checkbox" name="remove_hero" value="1" style="width:auto;" />
+                <span style="margin:0; text-transform:none; letter-spacing:0;">Remove hero image</span>
+              </label>
+            </div>
+          </div>
+        <% } %>
+        <input type="file" name="hero_image_file" accept="image/*" />
+      </label>
+
+      <label style="display:flex; align-items:center; gap:.5rem;">
+        <input type="checkbox" name="published" <%= row && row.published ? 'checked' : '' %> style="width:auto;" />
+        <span style="margin:0; text-transform:none; letter-spacing:0; font-size:.95rem;">
+          Published
+          <% if (row && row.published_at) { %>
+            <span class="muted" style="font-weight:normal;">— first published <%= row.published_at.slice(0,10) %></span>
+          <% } %>
+        </span>
+      </label>
+
+      <div class="action-row">
+        <a class="btn btn-ghost" href="/admin/posts">Cancel</a>
+        <button type="submit" class="btn btn-primary"><%= row ? 'Save changes' : 'Create post' %></button>
+      </div>
+    </form>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+
+<article class="deep-page">
+  <section class="deep-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <a href="/services">Services</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page"><%= service.shortName || service.name %></span>
+      </nav>
+      <p class="eyebrow"><%= service.eyebrow %></p>
+      <h1><%= service.h1 %></h1>
+      <p class="deep-lede"><%= service.lede %></p>
+      <div class="deep-ctas">
+        <a class="btn btn-primary" href="/#contact">Start a Project</a>
+        <a class="btn btn-ghost" href="tel:+18312344669">Call (831) 234-4669</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container deep-body">
+      <%- service.bodyHtml %>
+    </div>
+  </section>
+
+  <% if (service.faq && service.faq.length) { %>
+  <section class="section section-alt">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">FAQ</p>
+        <h2>Common questions about <%= (service.shortName || service.name).toLowerCase() %></h2>
+      </header>
+      <div class="faq-list">
+        <% service.faq.forEach(function(item, i){ %>
+          <details class="faq-item"<%= i === 0 ? ' open' : '' %>>
+            <summary><%= item.q %></summary>
+            <p><%= item.a %></p>
+          </details>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <section class="section">
+    <div class="container related-grid">
+      <div class="related-col">
+        <h3>Other services</h3>
+        <ul class="related-list">
+          <% services.filter(function(s){ return s.slug !== service.slug; }).forEach(function(s){ %>
+            <li><a href="/services/<%= s.slug %>"><%= s.name %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="related-col">
+        <h3>Areas we serve</h3>
+        <ul class="related-list">
+          <% areas.forEach(function(a){ %>
+            <li><a href="/areas/<%= a.slug %>"><%= service.shortName || service.name %> in <%= a.shortName || a.name %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  </section>
+</article>
+
+<%- include('partials/footer') %>

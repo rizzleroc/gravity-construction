@@ -1,0 +1,55 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1>Testimonials</h1>
+      <a class="btn btn-primary" href="/admin/testimonials/new">+ New testimonial</a>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>Author</th>
+            <th>Quote</th>
+            <th>Project</th>
+            <th>Rating</th>
+            <th>Status</th>
+            <th style="width: 180px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!rows.length) { %>
+            <tr><td colspan="6" class="muted" style="padding: 2rem; text-align: center;">No testimonials yet.</td></tr>
+          <% } %>
+          <% rows.forEach(function(r) { %>
+            <tr>
+              <td>
+                <strong><%= r.author %></strong>
+                <% if (r.location) { %><br/><span class="muted" style="font-size:.85rem"><%= r.location %></span><% } %>
+              </td>
+              <td class="muted" style="max-width: 360px;">"<%= r.quote.length > 120 ? r.quote.slice(0,120) + '…' : r.quote %>"</td>
+              <td class="muted" style="font-size:.85rem"><%= r.project_title || '—' %></td>
+              <td><%= r.rating ? '★'.repeat(r.rating) : '—' %></td>
+              <td>
+                <% if (r.published) { %><span class="pill pill-on">Published</span><% } else { %><span class="pill pill-off">Hidden</span><% } %>
+              </td>
+              <td style="text-align: right;">
+                <a class="btn btn-ghost" href="/admin/testimonials/<%= r.id %>/edit">Edit</a>
+                <form method="POST" action="/admin/testimonials/<%= r.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this testimonial?');">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+</body>
+</html>

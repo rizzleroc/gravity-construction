@@ -1,0 +1,22 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    Gravity
+    <small>Admin</small>
+  </div>
+  <nav>
+    <% const path_ = (typeof currentPath !== 'undefined' ? currentPath : ''); %>
+    <a href="/admin"              class="<%= path_ === '/admin' ? 'active' : '' %>">Dashboard</a>
+    <a href="/admin/specials"     class="<%= path_.startsWith('/admin/specials') ? 'active' : '' %>">Specials</a>
+    <a href="/admin/events"       class="<%= path_.startsWith('/admin/events') ? 'active' : '' %>">Events</a>
+    <a href="/admin/projects"     class="<%= path_.startsWith('/admin/projects') ? 'active' : '' %>">Projects</a>
+    <a href="/admin/testimonials" class="<%= path_.startsWith('/admin/testimonials') ? 'active' : '' %>">Testimonials</a>
+    <a href="/admin/posts"        class="<%= path_.startsWith('/admin/posts') ? 'active' : '' %>">Blog</a>
+    <a href="/admin/instagram"    class="<%= path_.startsWith('/admin/instagram') ? 'active' : '' %>">Instagram</a>
+  </nav>
+  <div class="sidebar-footer">
+    Signed in as <strong><%= user ? user.name : '—' %></strong><br/>
+    <form method="POST" action="/admin/logout" style="display:inline">
+      <button type="submit" class="link">Sign out</button>
+    </form> · <a href="/" target="_blank">View site</a>
+  </div>
+</aside>

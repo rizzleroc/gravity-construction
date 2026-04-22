@@ -1,0 +1,58 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1><%= row ? 'Edit event' : 'New event' %></h1>
+      <a class="btn btn-ghost" href="/admin/events">← Back</a>
+    </div>
+
+    <form method="POST" action="<%= action %>" class="card">
+      <label>
+        <span>Title</span>
+        <input type="text" name="title" required value="<%= row ? row.title : '' %>" />
+      </label>
+
+      <div class="grid grid-2">
+        <label>
+          <span>Starts (required)</span>
+          <input type="datetime-local" name="starts_at" required value="<%= row && row.starts_at ? row.starts_at.replace(' ', 'T').slice(0,16) : '' %>" />
+        </label>
+        <label>
+          <span>Ends (optional)</span>
+          <input type="datetime-local" name="ends_at" value="<%= row && row.ends_at ? row.ends_at.replace(' ', 'T').slice(0,16) : '' %>" />
+        </label>
+      </div>
+
+      <label>
+        <span>Location</span>
+        <input type="text" name="location" value="<%= row && row.location ? row.location : '' %>" placeholder="Downtown Santa Cruz" />
+      </label>
+
+      <label>
+        <span>External URL (optional)</span>
+        <input type="url" name="url" value="<%= row && row.url ? row.url : '' %>" placeholder="https://..." />
+      </label>
+
+      <label>
+        <span>Description</span>
+        <textarea name="description" rows="4"><%= row && row.description ? row.description : '' %></textarea>
+      </label>
+
+      <label style="display:flex; align-items:center; gap:.5rem;">
+        <input type="checkbox" name="active" <%= (!row || row.active) ? 'checked' : '' %> style="width:auto;" />
+        <span style="margin:0; text-transform:none; letter-spacing:0; font-size:.95rem;">Active (show on site)</span>
+      </label>
+
+      <div class="action-row">
+        <a class="btn btn-ghost" href="/admin/events">Cancel</a>
+        <button type="submit" class="btn btn-primary"><%= row ? 'Save changes' : 'Create event' %></button>
+      </div>
+    </form>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+
+<article class="deep-page">
+  <section class="deep-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">Blog</span>
+      </nav>
+      <p class="eyebrow">Notes from the field</p>
+      <h1>The Gravity Construction Blog</h1>
+      <p class="deep-lede">Honest takes on what it actually costs and takes to build or remodel in Santa Cruz County. Written by the team doing the work.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <% if (!posts.length) { %>
+        <p>No posts yet — check back soon.</p>
+      <% } else { %>
+      <div class="grid grid-3 blog-index-grid">
+        <% posts.forEach(function(p){ %>
+          <a class="post-index-card" href="/blog/<%= p.slug %>">
+            <% if (p.hero_image) { %>
+              <div class="post-img" role="img" aria-label="<%= p.title %>" style="background-image:url(<%= p.hero_image %>)"></div>
+            <% } %>
+            <div class="post-body">
+              <p class="post-date"><%= fmtDate(p.published_at) %></p>
+              <h2><%= p.title %></h2>
+              <% if (p.excerpt) { %><p class="post-excerpt"><%= p.excerpt %></p><% } %>
+              <span class="service-index-more">Read more →</span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+  </section>
+</article>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,55 @@
+<%- include('partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1>Welcome back, <%= user.name.split(' ')[0] %>.</h1>
+      <a class="btn btn-ghost" href="/" target="_blank">Open public site →</a>
+    </div>
+
+    <div class="grid grid-3">
+      <a class="stat-tile" href="/admin/specials">
+        <span class="n"><%= counts.specials %></span>
+        <span class="l">Active specials</span>
+      </a>
+      <a class="stat-tile" href="/admin/events">
+        <span class="n"><%= counts.events %></span>
+        <span class="l">Upcoming events</span>
+      </a>
+      <a class="stat-tile" href="/admin/projects">
+        <span class="n"><%= counts.projects %></span>
+        <span class="l">Featured projects</span>
+      </a>
+      <a class="stat-tile" href="/admin/testimonials">
+        <span class="n"><%= counts.testimonials %></span>
+        <span class="l">Testimonials</span>
+      </a>
+      <a class="stat-tile" href="/admin/posts">
+        <span class="n"><%= counts.posts %></span>
+        <span class="l">Published posts</span>
+      </a>
+      <a class="stat-tile" href="/admin/instagram">
+        <span class="n"><%= counts.instagram %></span>
+        <span class="l">Instagram posts</span>
+      </a>
+    </div>
+
+    <div class="card" style="margin-top: 2rem">
+      <h2>Quick actions</h2>
+      <p class="muted">Jump straight into the thing you need.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: .5rem;">
+        <a class="btn btn-primary" href="/admin/specials/new">+ New special</a>
+        <a class="btn btn-ghost" href="/admin/events/new">+ New event</a>
+        <a class="btn btn-ghost" href="/admin/projects/new">+ New project</a>
+        <a class="btn btn-ghost" href="/admin/testimonials/new">+ New testimonial</a>
+        <a class="btn btn-ghost" href="/admin/posts/new">+ New blog post</a>
+        <a class="btn btn-ghost" href="/admin/instagram/new">+ Add Instagram post</a>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

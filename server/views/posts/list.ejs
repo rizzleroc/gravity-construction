@@ -1,0 +1,53 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1>Blog posts</h1>
+      <a class="btn btn-primary" href="/admin/posts/new">+ New post</a>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Status</th>
+            <th>Published</th>
+            <th style="width: 180px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!rows.length) { %>
+            <tr><td colspan="5" class="muted" style="padding: 2rem; text-align: center;">No posts yet.</td></tr>
+          <% } %>
+          <% rows.forEach(function(r) { %>
+            <tr>
+              <td>
+                <strong><%= r.title %></strong>
+                <% if (r.slug) { %><br/><span class="muted" style="font-size:.8rem">/<%= r.slug %></span><% } %>
+              </td>
+              <td class="muted" style="font-size:.9rem"><%= r.author_name || '—' %></td>
+              <td>
+                <% if (r.published) { %><span class="pill pill-on">Published</span><% } else { %><span class="pill pill-off">Draft</span><% } %>
+              </td>
+              <td class="muted" style="font-size:.85rem"><%= r.published_at ? r.published_at.slice(0,10) : '—' %></td>
+              <td style="text-align: right;">
+                <a class="btn btn-ghost" href="/admin/posts/<%= r.id %>/edit">Edit</a>
+                <form method="POST" action="/admin/posts/<%= r.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this post?');">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+</body>
+</html>

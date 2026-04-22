@@ -1,0 +1,46 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1><%= row ? 'Edit post' : 'Add Instagram post' %></h1>
+      <a class="btn btn-ghost" href="/admin/instagram">← Back</a>
+    </div>
+
+    <form method="POST" action="<%= action %>" class="card">
+      <label>
+        <span>Instagram post URL or full embed snippet</span>
+        <textarea name="url" rows="3" required placeholder="https://www.instagram.com/p/DWpqcW9FMCi/  — or paste the whole &lt;blockquote&gt; embed code"><%= row ? row.url : '' %></textarea>
+        <small class="muted" style="display:block; margin-top:.35rem;">
+          On Instagram, open the post → Share → "Embed" → copy the code. You can paste the URL alone or the full code; the URL gets extracted either way.
+        </small>
+      </label>
+
+      <label>
+        <span>Caption for admin reference (optional — not shown on site)</span>
+        <input type="text" name="caption" value="<%= row && row.caption ? row.caption : '' %>" placeholder="Kitchen remodel in Capitola" />
+      </label>
+
+      <div class="grid grid-2">
+        <label>
+          <span>Sort order (lower = first)</span>
+          <input type="number" name="sort_order" value="<%= row ? row.sort_order : 0 %>" />
+        </label>
+        <label style="display:flex; align-items:center; gap:.5rem; padding-top:1.4rem;">
+          <input type="checkbox" name="published" <%= (!row || row.published) ? 'checked' : '' %> style="width:auto;" />
+          <span style="margin:0; text-transform:none; letter-spacing:0; font-size:.95rem;">Show on site</span>
+        </label>
+      </div>
+
+      <div class="action-row">
+        <a class="btn btn-ghost" href="/admin/instagram">Cancel</a>
+        <button type="submit" class="btn btn-primary"><%= row ? 'Save' : 'Add post' %></button>
+      </div>
+    </form>
+  </main>
+</div>
+</body>
+</html>

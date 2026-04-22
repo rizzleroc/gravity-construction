@@ -1,0 +1,69 @@
+<%- include('partials/header') %>
+
+<article class="deep-page">
+  <section class="deep-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <a href="/blog">Blog</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page"><%= post.title %></span>
+      </nav>
+      <p class="eyebrow"><%= fmtDate(post.published_at) %></p>
+      <h1><%= post.title %></h1>
+      <% if (post.excerpt) { %><p class="deep-lede"><%= post.excerpt %></p><% } %>
+    </div>
+  </section>
+
+  <% if (post.hero_image) { %>
+    <div class="post-hero-wrap">
+      <div class="container">
+        <img class="post-hero" src="<%= post.hero_image %>" alt="<%= post.title %>" loading="lazy" />
+      </div>
+    </div>
+  <% } %>
+
+  <section class="section">
+    <div class="container deep-body post-body">
+      <%- post.body %>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="cta-block">
+        <h2>Thinking about a project in Santa Cruz?</h2>
+        <p>We do a free walk-through and written scope before you commit to anything. Most clients say the first meeting saves them weeks of online guessing.</p>
+        <div class="deep-ctas">
+          <a class="btn btn-primary" href="/#contact">Start a Project</a>
+          <a class="btn btn-ghost" href="tel:+18312344669">Call (831) 234-4669</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <% if (related && related.length) { %>
+  <section class="section">
+    <div class="container">
+      <h2>More from the blog</h2>
+      <div class="grid grid-3 blog-index-grid">
+        <% related.forEach(function(p){ %>
+          <a class="post-index-card" href="/blog/<%= p.slug %>">
+            <% if (p.hero_image) { %>
+              <div class="post-img" role="img" aria-label="<%= p.title %>" style="background-image:url(<%= p.hero_image %>)"></div>
+            <% } %>
+            <div class="post-body">
+              <p class="post-date"><%= fmtDate(p.published_at) %></p>
+              <h3><%= p.title %></h3>
+              <% if (p.excerpt) { %><p class="post-excerpt"><%= p.excerpt %></p><% } %>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+</article>
+
+<%- include('partials/footer') %>

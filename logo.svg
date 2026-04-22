@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Gravity Construction">
+  <defs>
+    <!-- Metallic silver for the mark -->
+    <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#f4f5f7"/>
+      <stop offset="35%" stop-color="#c8cbd1"/>
+      <stop offset="60%" stop-color="#8b9099"/>
+      <stop offset="100%" stop-color="#5a5f68"/>
+    </linearGradient>
+    <linearGradient id="chromeFace" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#dadde2"/>
+      <stop offset="100%" stop-color="#7a7f88"/>
+    </linearGradient>
+    <linearGradient id="chromeTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#f6f7f9"/>
+      <stop offset="100%" stop-color="#b7bbc2"/>
+    </linearGradient>
+    <linearGradient id="chromeSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"  stop-color="#6f747d"/>
+      <stop offset="100%" stop-color="#3f444c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Isometric cube with recessed G -->
+  <g transform="translate(160 130)">
+    <!-- Right (side) face -->
+    <polygon points="70,-40 70,90 0,130 0,0" fill="url(#chromeSide)"/>
+    <!-- Top face -->
+    <polygon points="-70,-40 0,-80 70,-40 0,0" fill="url(#chromeTop)"/>
+    <!-- Front (left) face with G carved out -->
+    <path fill="url(#chromeFace)" fill-rule="evenodd" d="
+      M -70,-40 L 0,0 L 0,130 L -70,90 Z
+      M -55,-12 L -15,10 L -15,45 L -32,36 L -32,50 L -15,59 L -15,85 L -25,80 L -25,62 L -42,53 L -42,10 L -55,3 Z
+    "/>
+    <!-- Edge highlights -->
+    <polyline points="-70,-40 0,-80 70,-40" fill="none" stroke="#ffffff" stroke-opacity=".4" stroke-width="1.5"/>
+    <polyline points="-70,-40 0,0 70,-40" fill="none" stroke="#2a2d33" stroke-opacity=".35" stroke-width="1"/>
+    <line x1="0" y1="0" x2="0" y2="130" stroke="#2a2d33" stroke-opacity=".35" stroke-width="1"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g text-anchor="middle" font-family="'Barlow Condensed','Inter',sans-serif">
+    <text x="160" y="290" fill="#ffffff" font-weight="900" font-size="46" letter-spacing="2">GRAVITY</text>
+    <text x="160" y="312" fill="#ffffff" font-weight="500" font-size="14" letter-spacing="6">CONSTRUCTION</text>
+  </g>
+</svg>

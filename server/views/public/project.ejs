@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+
+<article class="deep-page">
+  <section class="deep-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <a href="/#projects">Projects</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page"><%= project.title %></span>
+      </nav>
+      <p class="eyebrow"><%= [project.scope, project.location].filter(Boolean).join(' · ') %></p>
+      <h1><%= project.title %></h1>
+      <% if (project.summary) { %><p class="deep-lede"><%= project.summary %></p><% } %>
+    </div>
+  </section>
+
+  <% if (project.hero_image) { %>
+    <div class="post-hero-wrap">
+      <div class="container">
+        <img class="post-hero" src="<%= project.hero_image %>" alt="<%= project.title %>" loading="lazy" />
+      </div>
+    </div>
+  <% } %>
+
+  <% if (project.body) { %>
+  <section class="section">
+    <div class="container deep-body post-body">
+      <%- project.body %>
+    </div>
+  </section>
+  <% } %>
+
+  <% if (gallery && gallery.length) { %>
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Gallery</h2>
+      <div class="project-gallery">
+        <% gallery.forEach(function(g){ %>
+          <figure class="gallery-item">
+            <img src="<%= g.url %>" alt="<%= g.caption || project.title %>" loading="lazy" />
+            <% if (g.caption) { %><figcaption><%= g.caption %></figcaption><% } %>
+          </figure>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-block">
+        <h2>Like what you see?</h2>
+        <p>We'd love to hear about your project. Call or send a message — we'll schedule a walk-through.</p>
+        <div class="deep-ctas">
+          <a class="btn btn-primary" href="/#contact">Start a Project</a>
+          <a class="btn btn-ghost" href="tel:+18312344669">Call (831) 234-4669</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>
+
+<%- include('partials/footer') %>

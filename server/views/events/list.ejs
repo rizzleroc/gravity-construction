@@ -1,0 +1,55 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1>Events</h1>
+      <a class="btn btn-primary" href="/admin/events/new">+ New event</a>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>When</th>
+            <th>Where</th>
+            <th>Status</th>
+            <th style="width: 180px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!rows.length) { %>
+            <tr><td colspan="5" class="muted" style="padding: 2rem; text-align: center;">No events yet.</td></tr>
+          <% } %>
+          <% rows.forEach(function(r) { %>
+            <tr>
+              <td>
+                <strong><%= r.title %></strong>
+                <% if (r.url) { %><br/><span class="muted" style="font-size:.85rem"><%= r.url %></span><% } %>
+              </td>
+              <td class="muted" style="font-size:.85rem">
+                <%= r.starts_at %><% if (r.ends_at) { %><br/>→ <%= r.ends_at %><% } %>
+              </td>
+              <td class="muted" style="font-size:.9rem"><%= r.location || '—' %></td>
+              <td>
+                <% if (r.active) { %><span class="pill pill-on">Active</span><% } else { %><span class="pill pill-off">Off</span><% } %>
+              </td>
+              <td style="text-align: right;">
+                <a class="btn btn-ghost" href="/admin/events/<%= r.id %>/edit">Edit</a>
+                <form method="POST" action="/admin/events/<%= r.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this event?');">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+</body>
+</html>

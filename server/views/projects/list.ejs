@@ -1,0 +1,62 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1>Projects</h1>
+      <a class="btn btn-primary" href="/admin/projects/new">+ New project</a>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Scope</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th style="width: 180px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!rows.length) { %>
+            <tr><td colspan="6" class="muted" style="padding: 2rem; text-align: center;">No projects yet.</td></tr>
+          <% } %>
+          <% rows.forEach(function(r) { %>
+            <tr>
+              <td style="width: 80px;">
+                <% if (r.hero_image) { %>
+                  <img src="<%= r.hero_image %>" alt="" style="width:64px; height:48px; object-fit:cover; border-radius:4px;" />
+                <% } else { %>
+                  <div style="width:64px; height:48px; background:var(--bg); border-radius:4px;"></div>
+                <% } %>
+              </td>
+              <td>
+                <strong><%= r.title %></strong>
+                <% if (r.slug) { %><br/><span class="muted" style="font-size:.8rem">/<%= r.slug %></span><% } %>
+              </td>
+              <td class="muted" style="font-size:.9rem"><%= r.scope || '—' %></td>
+              <td class="muted" style="font-size:.9rem"><%= r.location || '—' %></td>
+              <td>
+                <% if (r.featured) { %><span class="pill pill-info">Featured</span><br/><% } %>
+                <% if (r.published) { %><span class="pill pill-on">Published</span><% } else { %><span class="pill pill-off">Draft</span><% } %>
+              </td>
+              <td style="text-align: right;">
+                <a class="btn btn-ghost" href="/admin/projects/<%= r.id %>/edit">Edit</a>
+                <form method="POST" action="/admin/projects/<%= r.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this project and all its images?');">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+</body>
+</html>

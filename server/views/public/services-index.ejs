@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<article class="deep-page">
+  <section class="deep-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">Services</span>
+      </nav>
+      <p class="eyebrow">What we do</p>
+      <h1>Construction & Remodeling Services in Santa Cruz County</h1>
+      <p class="deep-lede">From kitchen and bath remodels to full ADU builds and ground-up custom homes — here's everything Gravity Construction does, with real cost ranges and timelines for each.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2 service-index-grid">
+        <% services.forEach(function(s){ %>
+          <a class="service-index-card" href="/services/<%= s.slug %>">
+            <p class="eyebrow"><%= s.eyebrow %></p>
+            <h2><%= s.name %></h2>
+            <p><%= s.lede %></p>
+            <span class="service-index-more">Learn more →</span>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</article>
+
+<%- include('partials/footer') %>

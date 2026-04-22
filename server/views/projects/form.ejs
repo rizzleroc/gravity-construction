@@ -1,0 +1,130 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1><%= row ? 'Edit project' : 'New project' %></h1>
+      <a class="btn btn-ghost" href="/admin/projects">← Back</a>
+    </div>
+
+    <form method="POST" action="<%= action %>" enctype="multipart/form-data" class="card">
+      <div class="grid grid-2">
+        <label>
+          <span>Title</span>
+          <input type="text" name="title" required value="<%= row ? row.title : '' %>" />
+        </label>
+        <label>
+          <span>Slug (auto from title if blank)</span>
+          <input type="text" name="slug" value="<%= row ? row.slug : '' %>" placeholder="ocean-view-kitchen" />
+        </label>
+      </div>
+
+      <div class="grid grid-2">
+        <label>
+          <span>Scope</span>
+          <input type="text" name="scope" value="<%= row && row.scope ? row.scope : '' %>" placeholder="Kitchen remodel" />
+        </label>
+        <label>
+          <span>Location</span>
+          <input type="text" name="location" value="<%= row && row.location ? row.location : '' %>" placeholder="Capitola, CA" />
+        </label>
+      </div>
+
+      <label>
+        <span>Summary (1–2 sentences for listings)</span>
+        <textarea name="summary" rows="2"><%= row && row.summary ? row.summary : '' %></textarea>
+      </label>
+
+      <label>
+        <span>Body (HTML allowed — sanitized on save)</span>
+        <textarea name="body" rows="10"><%= row && row.body ? row.body : '' %></textarea>
+      </label>
+
+      <label>
+        <span>Hero image</span>
+        <% if (row && row.hero_image) { %>
+          <div style="margin-bottom:.5rem;">
+            <img src="<%= row.hero_image %>" alt="" style="max-width: 320px; border-radius: var(--radius); border:1px solid var(--line);" />
+            <div style="margin-top:.5rem;">
+              <label style="display:inline-flex; align-items:center; gap:.4rem; margin:0; font-size:.9rem;">
+                <input type="checkbox" name="remove_hero" value="1" style="width:auto;" />
+                <span style="margin:0; text-transform:none; letter-spacing:0;">Remove hero image</span>
+              </label>
+            </div>
+          </div>
+        <% } %>
+        <input type="file" name="hero_image_file" accept="image/*" />
+      </label>
+
+      <div class="grid grid-2">
+        <label>
+          <span>Client name (optional)</span>
+          <input type="text" name="client_name" value="<%= row && row.client_name ? row.client_name : '' %>" />
+        </label>
+        <label>
+          <span>Sort order</span>
+          <input type="number" name="sort_order" value="<%= row ? row.sort_order : 0 %>" />
+        </label>
+      </div>
+
+      <label>
+        <span>Inline testimonial quote (optional)</span>
+        <textarea name="testimonial" rows="2"><%= row && row.testimonial ? row.testimonial : '' %></textarea>
+      </label>
+
+      <div class="grid grid-2">
+        <label style="display:flex; align-items:center; gap:.5rem;">
+          <input type="checkbox" name="featured" <%= row && row.featured ? 'checked' : '' %> style="width:auto;" />
+          <span style="margin:0; text-transform:none; letter-spacing:0; font-size:.95rem;">Featured (show in hero grid)</span>
+        </label>
+        <label style="display:flex; align-items:center; gap:.5rem;">
+          <input type="checkbox" name="published" <%= (!row || row.published) ? 'checked' : '' %> style="width:auto;" />
+          <span style="margin:0; text-transform:none; letter-spacing:0; font-size:.95rem;">Published (show on site)</span>
+        </label>
+      </div>
+
+      <div class="action-row">
+        <a class="btn btn-ghost" href="/admin/projects">Cancel</a>
+        <button type="submit" class="btn btn-primary"><%= row ? 'Save changes' : 'Create project' %></button>
+      </div>
+    </form>
+
+    <% if (row) { %>
+      <div class="card" style="margin-top: 2rem;">
+        <h2>Gallery</h2>
+        <p class="muted">Additional photos shown on this project's detail page.</p>
+
+        <% if (images && images.length) { %>
+          <div class="grid grid-3" style="margin-bottom: 1.5rem;">
+            <% images.forEach(function(img) { %>
+              <div style="background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); overflow:hidden;">
+                <img src="<%= img.path %>" alt="<%= img.alt || '' %>" style="width:100%; aspect-ratio: 4/3; object-fit: cover;" />
+                <div style="padding: .5rem .75rem; display:flex; justify-content:space-between; align-items:center; gap:.5rem;">
+                  <span class="muted" style="font-size:.8rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><%= img.alt || '(no alt)' %></span>
+                  <form method="POST" action="/admin/projects/<%= row.id %>/images/<%= img.id %>/delete" onsubmit="return confirm('Remove this image?');">
+                    <button type="submit" class="btn btn-danger" style="padding: .25rem .5rem; font-size: .8rem;">Remove</button>
+                  </form>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="muted">No gallery images yet.</p>
+        <% } %>
+
+        <form method="POST" action="/admin/projects/<%= row.id %>/images" enctype="multipart/form-data">
+          <label>
+            <span>Upload images (up to 10)</span>
+            <input type="file" name="images" accept="image/*" multiple />
+          </label>
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+      </div>
+    <% } %>
+  </main>
+</div>
+</body>
+</html>

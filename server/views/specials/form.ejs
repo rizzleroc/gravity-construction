@@ -1,0 +1,65 @@
+<%- include('../partials/head', { title }) %>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/sidebar', { user, currentPath }) %>
+  <main class="content">
+    <%- include('../partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <div class="page-head">
+      <h1><%= row ? 'Edit special' : 'New special' %></h1>
+      <a class="btn btn-ghost" href="/admin/specials">← Back</a>
+    </div>
+
+    <form method="POST" action="<%= action %>" class="card">
+      <label>
+        <span>Title</span>
+        <input type="text" name="title" required value="<%= row ? row.title : '' %>" />
+      </label>
+
+      <label>
+        <span>Body (short description, HTML allowed)</span>
+        <textarea name="body" rows="4"><%= row ? row.body : '' %></textarea>
+      </label>
+
+      <div class="grid grid-2">
+        <label>
+          <span>CTA label (optional)</span>
+          <input type="text" name="cta_label" value="<%= row && row.cta_label ? row.cta_label : '' %>" placeholder="Claim this offer" />
+        </label>
+        <label>
+          <span>CTA link (optional)</span>
+          <input type="text" name="cta_href" value="<%= row && row.cta_href ? row.cta_href : '' %>" placeholder="#contact or tel:+18312344669" />
+        </label>
+      </div>
+
+      <div class="grid grid-2">
+        <label>
+          <span>Starts (optional)</span>
+          <input type="date" name="starts_at" value="<%= row && row.starts_at ? row.starts_at.slice(0,10) : '' %>" />
+        </label>
+        <label>
+          <span>Ends (optional)</span>
+          <input type="date" name="ends_at" value="<%= row && row.ends_at ? row.ends_at.slice(0,10) : '' %>" />
+        </label>
+      </div>
+
+      <div class="grid grid-2">
+        <label>
+          <span>Sort order (lower = first)</span>
+          <input type="number" name="sort_order" value="<%= row ? row.sort_order : 0 %>" />
+        </label>
+        <label style="display:flex; align-items:center; gap:.5rem; padding-top:1.4rem;">
+          <input type="checkbox" name="active" <%= (!row || row.active) ? 'checked' : '' %> style="width:auto;" />
+          <span style="margin:0; text-transform:none; letter-spacing:0; font-size:.95rem;">Active (show on site)</span>
+        </label>
+      </div>
+
+      <div class="action-row">
+        <a class="btn btn-ghost" href="/admin/specials">Cancel</a>
+        <button type="submit" class="btn btn-primary"><%= row ? 'Save changes' : 'Create special' %></button>
+      </div>
+    </form>
+  </main>
+</div>
+</body>
+</html>

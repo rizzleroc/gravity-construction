@@ -1,0 +1,33 @@
+<%- include('partials/head', { title }) %>
+<body class="login-page">
+  <form method="POST" action="/admin/verify" class="login-card">
+    <h1>Enter code</h1>
+    <p class="sub">We texted a 6-digit code to <%= phoneHint %>.</p>
+
+    <%- include('partials/flash', { flash: typeof flash !== 'undefined' ? flash : null }) %>
+
+    <label>
+      <span>Code</span>
+      <input
+        type="text"
+        name="code"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        autocomplete="one-time-code"
+        maxlength="10"
+        required
+        autofocus
+      />
+    </label>
+    <button type="submit" class="btn btn-primary btn-block">Verify</button>
+  </form>
+
+  <form method="POST" action="/admin/verify/resend" class="login-card" style="margin-top:1rem; text-align:center;">
+    <button type="submit" class="btn btn-secondary btn-block">Resend code</button>
+  </form>
+
+  <form method="POST" action="/admin/logout" style="margin-top:1rem; text-align:center;">
+    <button type="submit" class="btn-link">Cancel and sign out</button>
+  </form>
+</body>
+</html>

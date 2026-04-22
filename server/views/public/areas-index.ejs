@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<article class="deep-page">
+  <section class="deep-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">Service Areas</span>
+      </nav>
+      <p class="eyebrow">Where we work</p>
+      <h1>Gravity Construction Service Areas</h1>
+      <p class="deep-lede">We build and remodel throughout Santa Cruz County — from the Westside to the San Lorenzo Valley. Here's what to know about construction in each of the communities we serve.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2 service-index-grid">
+        <% areas.forEach(function(a){ %>
+          <a class="service-index-card" href="/areas/<%= a.slug %>">
+            <p class="eyebrow"><%= a.eyebrow %></p>
+            <h2><%= a.name %></h2>
+            <p><%= a.lede %></p>
+            <span class="service-index-more">Learn more →</span>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</article>
+
+<%- include('partials/footer') %>

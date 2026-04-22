@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+
+<article class="deep-page">
+  <section class="deep-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <a href="/areas">Service Areas</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page"><%= area.shortName || area.name %></span>
+      </nav>
+      <p class="eyebrow"><%= area.eyebrow %></p>
+      <h1><%= area.h1 %></h1>
+      <p class="deep-lede"><%= area.lede %></p>
+      <div class="deep-ctas">
+        <a class="btn btn-primary" href="/#contact">Start a Project</a>
+        <a class="btn btn-ghost" href="tel:+18312344669">Call (831) 234-4669</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container deep-body">
+      <%- area.bodyHtml %>
+    </div>
+  </section>
+
+  <% if (area.faq && area.faq.length) { %>
+  <section class="section section-alt">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">FAQ</p>
+        <h2>Common questions — <%= area.shortName || area.name %></h2>
+      </header>
+      <div class="faq-list">
+        <% area.faq.forEach(function(item, i){ %>
+          <details class="faq-item"<%= i === 0 ? ' open' : '' %>>
+            <summary><%= item.q %></summary>
+            <p><%= item.a %></p>
+          </details>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <section class="section">
+    <div class="container related-grid">
+      <div class="related-col">
+        <h3>What we build in <%= area.shortName || area.name %></h3>
+        <ul class="related-list">
+          <% services.forEach(function(s){ %>
+            <li><a href="/services/<%= s.slug %>"><%= s.name %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="related-col">
+        <h3>Other areas we serve</h3>
+        <ul class="related-list">
+          <% areas.filter(function(a){ return a.slug !== area.slug; }).forEach(function(a){ %>
+            <li><a href="/areas/<%= a.slug %>"><%= a.name %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  </section>
+</article>
+
+<%- include('partials/footer') %>
