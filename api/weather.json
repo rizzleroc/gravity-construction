@@ -1,13 +1,13 @@
 {
   "location": "Santa Cruz, CA",
-  "fetchedAt": "2026-04-22T22:25:48.930Z",
+  "fetchedAt": "2026-04-22T23:09:39.497Z",
   "current": {
     "name": "This Afternoon",
     "temperature": 63,
     "unit": "F",
-    "shortForecast": "Mostly Sunny",
-    "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
-    "windSpeed": "7 to 12 mph",
+    "shortForecast": "Sunny",
+    "icon": "https://api.weather.gov/icons/land/day/few?size=medium",
+    "windSpeed": "7 mph",
     "windDirection": "WSW",
     "isDaytime": true
   },
