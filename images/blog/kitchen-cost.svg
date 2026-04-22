@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="Kitchen remodel cost illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1418"/>
+      <stop offset="100%" stop-color="#17212a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f5a524"/>
+      <stop offset="100%" stop-color="#ff7a59"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg)"/>
+  <!-- Cabinets -->
+  <g transform="translate(150,200)" stroke="#3fa9ae" stroke-width="3" fill="none">
+    <rect x="0" y="0" width="220" height="130" rx="4"/>
+    <rect x="0" y="140" width="220" height="120" rx="4"/>
+    <line x1="110" y1="0" x2="110" y2="130"/>
+    <line x1="110" y1="140" x2="110" y2="260"/>
+    <circle cx="50" cy="65" r="4" fill="#3fa9ae"/>
+    <circle cx="170" cy="65" r="4" fill="#3fa9ae"/>
+    <circle cx="50" cy="200" r="4" fill="#3fa9ae"/>
+    <circle cx="170" cy="200" r="4" fill="#3fa9ae"/>
+  </g>
+  <!-- Countertop -->
+  <rect x="130" y="325" width="260" height="12" fill="url(#accent)" rx="2"/>
+  <!-- Dollar amount bars -->
+  <g transform="translate(520,180)">
+    <rect x="0" y="100" width="80" height="120" fill="#3fa9ae" opacity="0.85"/>
+    <rect x="100" y="50" width="80" height="170" fill="#f5a524" opacity="0.9"/>
+    <rect x="200" y="0" width="80" height="220" fill="#ff7a59" opacity="0.9"/>
+    <text x="40" y="240" font-family="Inter, sans-serif" font-size="18" fill="#b9c4c6" text-anchor="middle">$35K</text>
+    <text x="140" y="240" font-family="Inter, sans-serif" font-size="18" fill="#b9c4c6" text-anchor="middle">$90K</text>
+    <text x="240" y="240" font-family="Inter, sans-serif" font-size="18" fill="#b9c4c6" text-anchor="middle">$180K+</text>
+  </g>
+  <!-- Title -->
+  <text x="860" y="230" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="54" fill="#f2f4f2">Kitchen</text>
+  <text x="860" y="290" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="54" fill="url(#accent)">Remodel Cost</text>
+  <text x="860" y="340" font-family="Inter, sans-serif" font-size="22" fill="#b9c4c6">Santa Cruz · 2026</text>
+  <!-- Decorative dollar sign -->
+  <text x="1050" y="120" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="120" fill="#f5a524" opacity="0.15">$</text>
+</svg>

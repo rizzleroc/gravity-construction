@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="8 questions for Santa Cruz contractors">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1418"/>
+      <stop offset="100%" stop-color="#17212a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg5)"/>
+  <!-- Big 8 -->
+  <text x="220" y="420" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="420" fill="#f5a524" opacity="0.9">8</text>
+  <!-- Questions marks floating -->
+  <g font-family="Barlow Condensed, sans-serif" font-weight="900" fill="#3fa9ae">
+    <text x="130" y="150" font-size="48" opacity="0.6">?</text>
+    <text x="480" y="120" font-size="36" opacity="0.5">?</text>
+    <text x="450" y="460" font-size="52" opacity="0.7">?</text>
+    <text x="180" y="500" font-size="40" opacity="0.5">?</text>
+  </g>
+  <!-- Title -->
+  <text x="620" y="230" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="52" fill="#f2f4f2">Questions That</text>
+  <text x="620" y="290" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="52" fill="#f2f4f2">Separate a Good</text>
+  <text x="620" y="350" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="52" fill="#f5a524">Contractor from</text>
+  <text x="620" y="410" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="52" fill="#f5a524">a Bad One</text>
+  <text x="620" y="460" font-family="Inter, sans-serif" font-size="20" fill="#b9c4c6">Before you sign with anyone — us included.</text>
+</svg>

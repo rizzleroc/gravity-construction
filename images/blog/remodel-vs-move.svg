@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="Remodel vs move math">
+  <defs>
+    <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1418"/>
+      <stop offset="100%" stop-color="#17212a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg6)"/>
+  <!-- Left house (remodel - keep) -->
+  <g transform="translate(140,240)">
+    <polygon points="0,80 120,0 240,80" fill="#f5a524"/>
+    <rect x="20" y="80" width="200" height="160" fill="#253038"/>
+    <rect x="50" y="120" width="50" height="70" fill="#3fa9ae" opacity="0.5"/>
+    <rect x="140" y="120" width="50" height="70" fill="#3fa9ae" opacity="0.5"/>
+    <rect x="105" y="170" width="40" height="70" fill="#f5a524"/>
+    <!-- Tools on top (construction hint) -->
+    <g transform="translate(80,-40)" stroke="#f5a524" stroke-width="3" fill="none">
+      <line x1="0" y1="30" x2="30" y2="0"/>
+      <rect x="28" y="-5" width="12" height="20" fill="#f5a524" stroke="none" transform="rotate(45 34 5)"/>
+    </g>
+    <text x="120" y="280" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="26" fill="#f5a524" text-anchor="middle">REMODEL</text>
+    <text x="120" y="310" font-family="Inter, sans-serif" font-size="18" fill="#b9c4c6" text-anchor="middle">$7,420/mo</text>
+  </g>
+  <!-- VS -->
+  <text x="600" y="360" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="72" fill="#ff7a59" text-anchor="middle">VS</text>
+  <!-- Right house (move - new) -->
+  <g transform="translate(820,220)">
+    <polygon points="0,100 140,0 280,100" fill="#3fa9ae"/>
+    <rect x="20" y="100" width="240" height="180" fill="#253038"/>
+    <rect x="50" y="140" width="60" height="80" fill="#3fa9ae" opacity="0.5"/>
+    <rect x="170" y="140" width="60" height="80" fill="#3fa9ae" opacity="0.5"/>
+    <rect x="120" y="200" width="50" height="80" fill="#3fa9ae"/>
+    <!-- Moving truck hint -->
+    <text x="-20" y="-20" font-family="Inter, sans-serif" font-size="14" fill="#85939a">FOR SALE →</text>
+    <text x="140" y="320" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="26" fill="#3fa9ae" text-anchor="middle">MOVE</text>
+    <text x="140" y="350" font-family="Inter, sans-serif" font-size="18" fill="#b9c4c6" text-anchor="middle">$8,735/mo</text>
+  </g>
+  <!-- Title -->
+  <text x="600" y="100" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="52" fill="#f2f4f2" text-anchor="middle">Remodel vs. Move</text>
+  <text x="600" y="150" font-family="Inter, sans-serif" font-size="22" fill="#b9c4c6" text-anchor="middle">The Santa Cruz Prop-13 math, 2026</text>
+</svg>

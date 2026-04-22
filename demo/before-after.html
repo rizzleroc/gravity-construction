@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Gravity Construction — Before / After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#0d1418; --bg-alt:#11191d; --surface:#17212a;
+    --ink:#f2f4f2; --ink-dim:#b9c4c6; --ink-muted:#85939a;
+    --line:#253038;
+    --accent:#f5a524; --accent-hover:#ffb93d; --accent-ink:#1a1206;
+    --ocean:#3fa9ae; --sunset:#ff7a59; --redwood:#214236;
+    --radius:8px; --radius-lg:14px;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --shadow-sm:0 2px 8px rgba(0,0,0,.2);
+
+    --mode-color: var(--ink-muted);
+    --mode-glow: transparent;
+  }
+  [data-mode="before"]{ --mode-color: var(--sunset); --mode-glow: rgba(255,122,89,.25); }
+  [data-mode="after"] { --mode-color: var(--accent); --mode-glow: rgba(245,165,36,.28); }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html,body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif; font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,h4{ font-family:"Barlow Condensed","Inter",sans-serif; font-weight:800; margin:0 0 .5em; line-height:1.05; }
+  p{ margin:0 0 1em; }
+  code,.mono{ font-family:"JetBrains Mono",ui-monospace,Consolas,monospace; font-size:.9em; }
+  a{ color:var(--accent); text-decoration:none; }
+
+  .page-header{
+    padding: 1.4rem 2rem 1rem;
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1rem; flex-wrap:wrap;
+  }
+  .page-header h1{ font-size:clamp(1.6rem,3vw,2.2rem); letter-spacing:.01em; }
+  .page-header .sub{ color:var(--ink-dim); font-size:.95rem; margin:0; }
+  .page-header .eyebrow{
+    display:inline-block; font-family:"Barlow Condensed",sans-serif;
+    font-weight:700; font-size:.85rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:.35rem;
+  }
+
+  /* ---------- The big toggle ---------- */
+  .toggle-rail{
+    position:sticky; top:0; z-index:50;
+    padding:1.4rem 1rem; background:linear-gradient(180deg,var(--bg),rgba(13,20,24,.82));
+    backdrop-filter:blur(8px); display:flex; justify-content:center;
+    border-bottom:1px solid var(--line);
+  }
+  .toggle{
+    position:relative; display:flex; align-items:center; justify-content:space-between;
+    width:min(540px,92vw); padding:.35rem; background:var(--surface);
+    border:1px solid var(--line); border-radius:999px;
+    box-shadow:var(--shadow), 0 0 0 6px var(--mode-glow);
+    transition:box-shadow .4s ease;
+  }
+  .toggle button{
+    flex:1; appearance:none; border:0; background:transparent;
+    color:var(--ink-dim); font-family:"Barlow Condensed",sans-serif;
+    font-weight:800; font-size:1.4rem; letter-spacing:.08em; text-transform:uppercase;
+    padding:.9rem 1.25rem; border-radius:999px; cursor:pointer;
+    transition:color .3s ease; z-index:1;
+  }
+  .toggle button.active{ color:var(--accent-ink); }
+  [data-mode="before"] .toggle button.active{ color:#2a1710; }
+  .toggle::before{
+    content:""; position:absolute; top:.35rem; bottom:.35rem;
+    left:.35rem; width:calc(50% - .35rem);
+    background:var(--mode-color); border-radius:999px; z-index:0;
+    transition:transform .4s cubic-bezier(.68,-.55,.27,1.55), background .3s;
+    box-shadow:0 4px 14px rgba(0,0,0,.3);
+  }
+  [data-mode="after"] .toggle::before{ transform:translateX(100%); }
+  .toggle .pip{ font-size:.75rem; display:block; opacity:.75; font-weight:600; letter-spacing:.12em; }
+
+  main{ max-width:1400px; margin:0 auto; padding:1.5rem 1.25rem 4rem; }
+
+  .mode-banner{
+    text-align:center; margin:0 0 1rem;
+    font-family:"Barlow Condensed",sans-serif;
+    font-size:.85rem; letter-spacing:.25em; text-transform:uppercase;
+    color:var(--mode-color); font-weight:700;
+    transition:color .3s;
+  }
+
+  /* ---------- Site-preview iframe ---------- */
+  .site-stage{
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius-lg); overflow:hidden;
+    box-shadow:var(--shadow);
+    margin-bottom:1.5rem;
+  }
+  .stage-bar{
+    display:flex; align-items:center; gap:.5rem; padding:.65rem .9rem;
+    border-bottom:1px solid var(--line); background:#0b1115;
+  }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot-r{ background:#ff5f57; } .dot-y{ background:#febc2e; } .dot-g{ background:#28c840; }
+  .stage-url{
+    flex:1; background:#121a20; color:var(--ink-dim); padding:.35rem .7rem;
+    border-radius:5px; font-family:"JetBrains Mono",monospace; font-size:.8rem;
+    overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+    border:1px solid var(--line);
+  }
+  .stage-url .proto{ color:var(--ink-muted); }
+  .stage-badge{
+    font-family:"Barlow Condensed",sans-serif; font-weight:700;
+    font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    padding:.2rem .55rem; border-radius:999px;
+    background:var(--mode-color); color:var(--accent-ink);
+    transition:background .3s;
+  }
+  [data-mode="before"] .stage-badge{ color:#2a1710; }
+
+  /* The iframe area — swap with a fade */
+  .frames{ position:relative; background:#0b1115; }
+  .frames iframe{
+    width:100%; height:min(78vh,860px); border:0; display:block;
+    background:#0d1418;
+  }
+  .frames .slot{
+    position:absolute; inset:0; opacity:0; visibility:hidden;
+    transition:opacity .35s ease, visibility .35s;
+  }
+  .frames .slot.first{ position:static; }
+  [data-mode="before"] .slot[data-slot="before"]{ opacity:1; visibility:visible; }
+  [data-mode="after"]  .slot[data-slot="after"] { opacity:1; visibility:visible; }
+
+  /* ---------- Below-the-fold summary grid ---------- */
+  .grid{
+    display:grid; gap:1rem;
+    grid-template-columns:repeat(12,minmax(0,1fr));
+  }
+  .card{
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius-lg); padding:1.3rem;
+    box-shadow:var(--shadow-sm);
+    position:relative; overflow:hidden;
+  }
+  .card::after{
+    content:""; position:absolute; inset:0 0 auto 0; height:3px;
+    background:var(--mode-color); transition:background .3s;
+  }
+  .card h3{
+    font-size:1.05rem; color:var(--ink); margin-bottom:.25rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .card .k{ color:var(--ink-muted); font-size:.75rem;
+    font-family:"Barlow Condensed",sans-serif; letter-spacing:.18em; text-transform:uppercase; }
+  .col-3{ grid-column:span 3; }
+  .col-4{ grid-column:span 4; }
+  .col-6{ grid-column:span 6; }
+  @media(max-width:960px){ .col-3,.col-4,.col-6{ grid-column:span 12; } }
+
+  .stat{ display:flex; align-items:baseline; gap:.5rem; margin:.35rem 0; }
+  .stat .num{
+    font-family:"Barlow Condensed",sans-serif; font-weight:900;
+    font-size:1.9rem; line-height:1; color:var(--mode-color);
+    transition:color .3s; min-width:2.4ch;
+  }
+  .stat .lbl{ color:var(--ink-dim); font-size:.85rem; }
+
+  [data-swap] > [data-view="before"]{ display:none; }
+  [data-swap] > [data-view="after"]{ display:none; }
+  [data-mode="before"] [data-swap] > [data-view="before"]{ display:block; }
+  [data-mode="after"]  [data-swap] > [data-view="after"] { display:block; }
+
+  .url-row{
+    display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.5rem;
+  }
+  .url-chip{
+    font-family:"JetBrains Mono",monospace; font-size:.68rem;
+    background:#0b1115; color:var(--ink-dim);
+    border:1px solid var(--line); padding:.25rem .45rem; border-radius:4px;
+  }
+  .url-chip.new{ border-color:var(--accent); color:var(--accent);
+    background:rgba(245,165,36,.08); }
+
+  .flow{
+    display:flex; align-items:center; gap:.4rem; margin-top:.5rem;
+    flex-wrap:wrap;
+  }
+  .flow-step{
+    flex:1; min-width:100px;
+    background:#0b1115; border:1px solid var(--line); border-radius:6px;
+    padding:.5rem .6rem;
+  }
+  .flow-step .lbl{
+    font-family:"Barlow Condensed",sans-serif; font-weight:700;
+    color:var(--ink); font-size:.9rem;
+  }
+  .flow-step .sub{ color:var(--ink-muted); font-size:.68rem; }
+  .flow-step.new{ border-color:var(--accent); }
+  .flow-step.new .lbl{ color:var(--accent); }
+  .flow-arrow{ color:var(--ink-muted); font-family:"Barlow Condensed",sans-serif;
+    font-weight:700; font-size:1.1rem; }
+
+  .helpmsg{
+    font-size:.82rem; color:var(--ink-muted); text-align:center;
+    padding-top:.7rem;
+  }
+  .helpmsg kbd{
+    display:inline-block; padding:0 .4rem; border-radius:3px;
+    background:#0b1115; border:1px solid var(--line); color:var(--ink-dim);
+    font-family:"JetBrains Mono",monospace; font-size:.78rem;
+  }
+
+  .foot{
+    margin-top:2rem; padding:1.25rem; text-align:center;
+    color:var(--ink-muted); font-size:.85rem;
+    border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body data-mode="before">
+
+<header class="page-header">
+  <div>
+    <span class="eyebrow">Gravity Construction</span>
+    <h1>Before / After — the actual sites</h1>
+    <p class="sub">Live render of the original one-page site on the left of the toggle, current multi-page site on the right.</p>
+  </div>
+  <div style="text-align:right">
+    <div class="mono" style="color:var(--ink-muted);font-size:.85rem;">gravityconstructionsc.com</div>
+    <div class="mono" style="color:var(--ink-muted);font-size:.75rem;">CSLB #1075110</div>
+  </div>
+</header>
+
+<div class="toggle-rail">
+  <div class="toggle" role="tablist" aria-label="Before / after toggle">
+    <button id="btn-before" class="active" role="tab" aria-selected="true">
+      Before <span class="pip">simple one-pager</span>
+    </button>
+    <button id="btn-after" role="tab" aria-selected="false">
+      After <span class="pip">current site</span>
+    </button>
+  </div>
+</div>
+
+<main>
+
+  <div class="mode-banner" id="mode-banner">Viewing: BEFORE</div>
+
+  <!-- ---------- Live site preview ---------- -->
+  <section class="site-stage" aria-label="Rendered site preview">
+    <div class="stage-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <div class="stage-url">
+        <span class="proto">https://</span><span id="stage-host">gravityconstructionsc.com</span><span id="stage-path">/</span>
+      </div>
+      <span class="stage-badge" id="stage-badge">BEFORE</span>
+    </div>
+    <div class="frames">
+      <div class="slot first" data-slot="before">
+        <iframe src="site-before.html" title="Gravity Construction — simple one-page version" loading="lazy"></iframe>
+      </div>
+      <div class="slot" data-slot="after">
+        <iframe src="../index.html" title="Gravity Construction — current site" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <p class="helpmsg">
+    Flip with the toggle above, or press
+    <kbd>←</kbd> for Before,
+    <kbd>→</kbd> for After.
+  </p>
+
+  <!-- ---------- Summary cards ---------- -->
+  <section class="grid" style="margin-top:1.5rem;">
+
+    <div class="card col-3">
+      <h3>At a glance <span class="k">counts</span></h3>
+      <div data-swap>
+        <div data-view="before">
+          <div class="stat"><span class="num">1</span><span class="lbl">page (homepage only)</span></div>
+          <div class="stat"><span class="num">3</span><span class="lbl">service cards, no detail pages</span></div>
+          <div class="stat"><span class="num">0</span><span class="lbl">blog posts</span></div>
+          <div class="stat"><span class="num">0</span><span class="lbl">area pages</span></div>
+          <div class="stat"><span class="num">1</span><span class="lbl">login factor</span></div>
+        </div>
+        <div data-view="after">
+          <div class="stat"><span class="num">24</span><span class="lbl">URLs in sitemap</span></div>
+          <div class="stat"><span class="num">6</span><span class="lbl">service detail pages</span></div>
+          <div class="stat"><span class="num">6<span style="font-size:.6em;">+18</span></span><span class="lbl">blog posts (+ 18 scheduled)</span></div>
+          <div class="stat"><span class="num">8</span><span class="lbl">Santa Cruz area pages</span></div>
+          <div class="stat"><span class="num">2</span><span class="lbl">login factors (password + SMS)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col-6">
+      <h3>/sitemap.xml <span class="k">what Google crawls</span></h3>
+      <div data-swap>
+        <div data-view="before">
+          <div class="url-row"><span class="url-chip">/</span></div>
+          <p style="font-size:.78rem;color:var(--ink-muted);margin-top:.7rem;">
+            One URL. All content anchors on a single page — Google has no deep targets to rank.
+          </p>
+        </div>
+        <div data-view="after">
+          <div class="url-row">
+            <span class="url-chip new">/</span>
+            <span class="url-chip new">/services</span>
+            <span class="url-chip new">/services/kitchen-remodels</span>
+            <span class="url-chip new">/services/bathroom-remodels</span>
+            <span class="url-chip new">/services/adu-construction</span>
+            <span class="url-chip new">/services/whole-home-remodels</span>
+            <span class="url-chip new">/services/additions</span>
+            <span class="url-chip new">/services/new-construction</span>
+            <span class="url-chip new">/areas</span>
+            <span class="url-chip new">/areas/santa-cruz</span>
+            <span class="url-chip new">/areas/capitola</span>
+            <span class="url-chip new">/areas/aptos</span>
+            <span class="url-chip new">/areas/soquel</span>
+            <span class="url-chip new">/areas/live-oak</span>
+            <span class="url-chip new">/areas/scotts-valley</span>
+            <span class="url-chip new">/areas/ben-lomond</span>
+            <span class="url-chip new">/areas/felton</span>
+            <span class="url-chip new">/blog</span>
+            <span class="url-chip new">/blog/kitchen-cost-2026</span>
+            <span class="url-chip new">/blog/adu-rules-2026</span>
+            <span class="url-chip new">/blog/permit-timeline</span>
+            <span class="url-chip new">/blog/coastal-moisture</span>
+            <span class="url-chip new">/blog/contractor-questions</span>
+            <span class="url-chip new">/blog/remodel-vs-move</span>
+          </div>
+          <p style="font-size:.78rem;color:var(--ink-muted);margin-top:.7rem;">
+            24 URLs today. Grows automatically as scheduled posts release (+18 through Dec 28).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col-3">
+      <h3>Admin login <span class="k">/admin</span></h3>
+      <div data-swap>
+        <div data-view="before">
+          <div class="flow">
+            <div class="flow-step">
+              <div class="lbl">Password</div>
+              <div class="sub">bcrypt</div>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <div class="lbl">Session</div>
+              <div class="sub">14 days</div>
+            </div>
+          </div>
+        </div>
+        <div data-view="after">
+          <div class="flow">
+            <div class="flow-step">
+              <div class="lbl">Password</div>
+              <div class="sub">bcrypt</div>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step new">
+              <div class="lbl">SMS</div>
+              <div class="sub">Twilio</div>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <div class="lbl">Session</div>
+              <div class="sub">14 days</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="foot">
+    Demo page — <code>demo/before-after.html</code>. Toggle or arrow-key between the two versions.
+    Before is the simple one-page site (<code>demo/site-before.html</code>). After loads the live <code>../index.html</code>.
+  </div>
+</main>
+
+<script>
+  (function(){
+    const body    = document.body;
+    const btnB    = document.getElementById('btn-before');
+    const btnA    = document.getElementById('btn-after');
+    const banner  = document.getElementById('mode-banner');
+    const path    = document.getElementById('stage-path');
+    const badge   = document.getElementById('stage-badge');
+
+    function setMode(mode){
+      body.setAttribute('data-mode', mode);
+      btnB.classList.toggle('active', mode === 'before');
+      btnA.classList.toggle('active', mode === 'after');
+      btnB.setAttribute('aria-selected', String(mode === 'before'));
+      btnA.setAttribute('aria-selected', String(mode === 'after'));
+      banner.textContent = 'Viewing: ' + mode.toUpperCase();
+      badge.textContent = mode.toUpperCase();
+      path.textContent = (mode === 'before') ? '/ (v1)' : '/';
+    }
+
+    btnB.addEventListener('click', () => setMode('before'));
+    btnA.addEventListener('click', () => setMode('after'));
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft')  setMode('before');
+      if (e.key === 'ArrowRight') setMode('after');
+    });
+
+    setMode('before');
+  })();
+</script>
+</body>
+</html>

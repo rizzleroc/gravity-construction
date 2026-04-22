@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="Coastal moisture and Santa Cruz homes">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1418"/>
+      <stop offset="70%" stop-color="#1f6a6e"/>
+      <stop offset="100%" stop-color="#3fa9ae"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg4)"/>
+  <!-- Waves -->
+  <path d="M0 480 Q 100 450, 200 480 T 400 480 T 600 480 T 800 480 T 1000 480 T 1200 480 L 1200 600 L 0 600 Z" fill="#1f6a6e" opacity="0.7"/>
+  <path d="M0 510 Q 100 485, 200 510 T 400 510 T 600 510 T 800 510 T 1000 510 T 1200 510 L 1200 600 L 0 600 Z" fill="#3fa9ae" opacity="0.6"/>
+  <path d="M0 540 Q 100 520, 200 540 T 400 540 T 600 540 T 800 540 T 1000 540 T 1200 540 L 1200 600 L 0 600 Z" fill="#3fa9ae" opacity="0.45"/>
+  <!-- Fog swirls -->
+  <g opacity="0.25" fill="#f2f4f2">
+    <ellipse cx="200" cy="200" rx="140" ry="28"/>
+    <ellipse cx="500" cy="240" rx="180" ry="32"/>
+    <ellipse cx="900" cy="180" rx="160" ry="30"/>
+    <ellipse cx="1050" cy="260" rx="120" ry="26"/>
+  </g>
+  <!-- Droplets -->
+  <g fill="#f5a524">
+    <circle cx="320" cy="350" r="6" opacity="0.8"/>
+    <circle cx="380" cy="380" r="4" opacity="0.7"/>
+    <circle cx="420" cy="340" r="5" opacity="0.8"/>
+    <circle cx="780" cy="360" r="5" opacity="0.7"/>
+    <circle cx="820" cy="390" r="4" opacity="0.8"/>
+    <circle cx="860" cy="350" r="6" opacity="0.75"/>
+  </g>
+  <!-- House in fog -->
+  <g transform="translate(540,320)" opacity="0.9">
+    <polygon points="0,60 60,0 120,60" fill="#214236"/>
+    <rect x="10" y="60" width="100" height="80" fill="#253038"/>
+    <rect x="30" y="85" width="20" height="30" fill="#3fa9ae" opacity="0.5"/>
+    <rect x="70" y="85" width="20" height="30" fill="#3fa9ae" opacity="0.5"/>
+  </g>
+  <!-- Title -->
+  <text x="600" y="140" font-family="Barlow Condensed, sans-serif" font-weight="900" font-size="58" fill="#f2f4f2" text-anchor="middle">Coastal Moisture</text>
+  <text x="600" y="190" font-family="Inter, sans-serif" font-size="22" fill="#f2f4f2" text-anchor="middle" opacity="0.9">What it quietly does to Santa Cruz homes</text>
+</svg>
