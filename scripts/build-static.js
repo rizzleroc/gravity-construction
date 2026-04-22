@@ -89,7 +89,7 @@ const services = loadJson(path.join(SERVER, 'content', 'services.json'));
 const areas = loadJson(path.join(SERVER, 'content', 'areas.json'));
 
 // Try to load DB. If it's missing, publish with empty post/project sets.
-let posts = [], projects = [], testimonials = [], events = [], specials = [];
+let posts = [], projects = [], testimonials = [], events = [], specials = [], igPosts = [];
 try {
   const db = require(path.join(SERVER, 'db.js'));
   posts = db.prepare(`SELECT id, title, slug, excerpt, body, hero_image,
@@ -109,10 +109,72 @@ try {
     AND (starts_at IS NULL OR datetime(starts_at) <= datetime('now'))
     AND (ends_at IS NULL OR datetime(ends_at) >= datetime('now'))
     ORDER BY sort_order ASC, id DESC`).all();
-  console.log(`  loaded: ${posts.length} posts, ${projects.length} projects, ${testimonials.length} testimonials, ${events.length} events, ${specials.length} specials`);
+  // Column name varies across schemas — match what admin/instagram.js writes.
+  try {
+    igPosts = db.prepare(`SELECT id, url, caption, sort_order FROM instagram_posts
+      ORDER BY sort_order ASC, id DESC`).all();
+  } catch {
+    try {
+      igPosts = db.prepare(`SELECT id, permalink AS url, caption, sort_order FROM instagram_posts
+        ORDER BY sort_order ASC, id DESC`).all();
+    } catch (err) {
+      console.log('  (instagram_posts lookup failed:', err.message, ')');
+    }
+  }
+  console.log(`  loaded: ${posts.length} posts, ${projects.length} projects, ${testimonials.length} testimonials, ${events.length} events, ${specials.length} specials, ${igPosts.length} instagram`);
 } catch (err) {
   console.log('  (DB not available — building with empty blog/project sets)');
   console.log('  ', err.message);
+}
+
+// ---------- Weather snapshot (live fetch from weather.gov at build time) ----------
+async function fetchWeatherSnapshot() {
+  const LAT = 36.9741, LON = -122.0308;
+  const UA = 'GravityConstructionSC/1.0 (build-static.js)';
+  try {
+    const points = await fetch(`https://api.weather.gov/points/${LAT},${LON}`, {
+      headers: { 'User-Agent': UA, 'Accept': 'application/geo+json' },
+    });
+    if (!points.ok) throw new Error('points ' + points.status);
+    const pJson = await points.json();
+    const forecastUrl = pJson.properties && pJson.properties.forecast;
+    if (!forecastUrl) throw new Error('no forecast url');
+    const fc = await fetch(forecastUrl, {
+      headers: { 'User-Agent': UA, 'Accept': 'application/geo+json' },
+    });
+    if (!fc.ok) throw new Error('forecast ' + fc.status);
+    const fcJson = await fc.json();
+    const periods = (fcJson.properties && fcJson.properties.periods) || [];
+    const current = periods[0];
+    if (!current) throw new Error('no periods');
+    return {
+      location: 'Santa Cruz, CA',
+      fetchedAt: new Date().toISOString(),
+      current: {
+        name: current.name, temperature: current.temperature,
+        unit: current.temperatureUnit, shortForecast: current.shortForecast,
+        icon: current.icon, windSpeed: current.windSpeed,
+        windDirection: current.windDirection, isDaytime: current.isDaytime,
+      },
+      upcoming: periods.slice(1, 5).map(p => ({
+        name: p.name, temperature: p.temperature, unit: p.temperatureUnit,
+        shortForecast: p.shortForecast, icon: p.icon,
+      })),
+    };
+  } catch (err) {
+    console.log('  weather fetch failed, using fallback:', err.message);
+    // Fallback so the chip still shows something reasonable on the preview.
+    return {
+      location: 'Santa Cruz, CA',
+      fetchedAt: new Date().toISOString(),
+      current: {
+        name: 'Today', temperature: 64, unit: 'F',
+        shortForecast: 'Partly Cloudy', windSpeed: '10 mph',
+        windDirection: 'NW', isDaytime: true,
+      },
+      upcoming: [],
+    };
+  }
 }
 
 // ---------- Clean dist/ ----------
@@ -122,15 +184,28 @@ mkdirp(DIST);
 
 // ---------- Copy static assets ----------
 console.log('\n[3/6] Copying static assets…');
-['index.html', 'styles.css', 'script.js', 'logo.svg', 'gravity.png',
+['index.html', 'styles.css', 'logo.svg', 'gravity.png',
   'robots.txt', 'Santa_Cruz_Surfing_Museum_-_panoramio_(1).jpg'].forEach(copyFile);
 copyDir(path.join(ROOT, 'images'), 'images');
 copyDir(path.join(ROOT, 'demo'), 'demo');
 // Project hero images — best-effort (not in repo on a fresh clone).
 const uploadsSrc = path.join(SERVER, 'public', 'uploads');
 if (fs.existsSync(uploadsSrc)) copyDir(uploadsSrc, 'uploads');
-// Also copy uploads under /images/uploads so both paths resolve, since some
-// hero_image values may use one or the other in different records.
+
+// --- Patch script.js so its /api/* fetches resolve under the Pages subpath. ---
+// Only the endpoints we actually ship static snapshots for are rewritten to
+// real .json files; the rest are left to 404 silently (safeFetch swallows the
+// error and the server-side prerender keeps the prerendered content in place).
+{
+  let js = fs.readFileSync(path.join(ROOT, 'script.js'), 'utf8');
+  js = js
+    .replace(/'\/api\/weather'/g, `'${BASE_PATH}/api/weather.json'`)
+    .replace(/'\/api\/instagram'/g, `'${BASE_PATH}/api/instagram.json'`)
+    // Leave other /api/* requests alone — they'll 404 and safeFetch returns null,
+    // which the renderers treat as a no-op (prerendered content stays visible).
+    ;
+  write('script.js', js);
+}
 
 // ---------- Render EJS helper ----------
 function renderEjs(templateRel, locals) {
@@ -358,25 +433,10 @@ function prerenderHome() {
     );
   }
 
-  // --- Projects ---
-  if (projects.length) {
-    const featured = projects.filter(p => p.featured).concat(projects.filter(p => !p.featured)).slice(0, 6);
-    const inner = featured.map(p => {
-      const img = p.hero_image
-        ? `<div class="pcard-img" role="img" aria-label="${esc(p.title)} — ${esc(p.scope || 'project')}" style="background-image:url(${esc(p.hero_image)})"></div>`
-        : `<div class="pcard-img pcard-img-blank"></div>`;
-      const tagline = [p.scope, p.location].filter(Boolean).join(' · ');
-      return `<article class="pcard">` + img +
-        `<div class="pcard-body">` +
-          (tagline ? `<p class="pcard-tag">${esc(tagline)}</p>` : '') +
-          `<h3>${esc(p.title)}</h3>` +
-          (p.summary ? `<p class="pcard-summary">${esc(p.summary)}</p>` : '') +
-        `</div></article>`;
-    }).join('');
-    html = html.replace(/<section class="section section-alt" id="projects" hidden>/, '<section class="section section-alt" id="projects">');
-    html = html.replace(/(<[^>]*id=["']projects-grid["'][^>]*>)([\s\S]*?)(<\/[^>]+>)/,
-      (_, open, _inner, close) => open + inner + close);
-  }
+  // --- Projects --- (deliberately not injected: keep section hidden, remove nav link)
+  // The section in index.html stays `hidden` because we don't populate it.
+  // We also strip the #projects nav link so visitors don't click into emptiness.
+  html = html.replace(/<li>\s*<a href="#projects">Projects<\/a>\s*<\/li>\s*/, '');
 
   // --- Testimonials ---
   if (testimonials.length) {
@@ -424,6 +484,21 @@ function prerenderHome() {
   write('index.html', rewritePaths(html));
 }
 
+// ---------- API snapshots (weather + instagram) ----------
+async function buildApiSnapshots() {
+  console.log('\n[5b/6] Writing API snapshots (weather, instagram)…');
+  const weather = await fetchWeatherSnapshot();
+  write('api/weather.json', JSON.stringify(weather, null, 2));
+
+  // Instagram: script.js expects rows with a `url` field (IG permalink).
+  const igOut = igPosts.map(p => ({
+    id: p.id,
+    url: p.url,
+    caption: p.caption || '',
+  }));
+  write('api/instagram.json', JSON.stringify(igOut, null, 2));
+}
+
 // ---------- 404 page ----------
 function build404() {
   const html = `<!doctype html>
@@ -446,6 +521,7 @@ function writeNoJekyll() { write('.nojekyll', ''); }
 (async () => {
   await buildDeepPages();
   prerenderHome();
+  await buildApiSnapshots();
   console.log('\n[6/6] Writing 404 + .nojekyll…');
   build404();
   writeNoJekyll();
