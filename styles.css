@@ -419,6 +419,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   counter-reset: step;
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
 }
 .process-list li {
   background: var(--surface);
