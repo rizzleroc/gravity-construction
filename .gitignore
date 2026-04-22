@@ -37,6 +37,8 @@ Thumbs.db
 .claude/
 
 # Build artifacts
+# (dist/ is published to the gh-pages branch via scripts/deploy-pages.sh,
+#  not tracked on main)
 dist/
 build/
 
