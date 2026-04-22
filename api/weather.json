@@ -1,0 +1,44 @@
+{
+  "location": "Santa Cruz, CA",
+  "fetchedAt": "2026-04-22T22:25:48.930Z",
+  "current": {
+    "name": "This Afternoon",
+    "temperature": 63,
+    "unit": "F",
+    "shortForecast": "Mostly Sunny",
+    "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
+    "windSpeed": "7 to 12 mph",
+    "windDirection": "WSW",
+    "isDaytime": true
+  },
+  "upcoming": [
+    {
+      "name": "Tonight",
+      "temperature": 46,
+      "unit": "F",
+      "shortForecast": "Mostly Clear then Patchy Fog",
+      "icon": "https://api.weather.gov/icons/land/night/few/fog?size=medium"
+    },
+    {
+      "name": "Thursday",
+      "temperature": 71,
+      "unit": "F",
+      "shortForecast": "Patchy Fog then Sunny",
+      "icon": "https://api.weather.gov/icons/land/day/fog/few?size=medium"
+    },
+    {
+      "name": "Thursday Night",
+      "temperature": 47,
+      "unit": "F",
+      "shortForecast": "Partly Cloudy",
+      "icon": "https://api.weather.gov/icons/land/night/sct?size=medium"
+    },
+    {
+      "name": "Friday",
+      "temperature": 67,
+      "unit": "F",
+      "shortForecast": "Partly Sunny",
+      "icon": "https://api.weather.gov/icons/land/day/bkn?size=medium"
+    }
+  ]
+}

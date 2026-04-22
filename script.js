@@ -207,12 +207,12 @@
 
   // Kick off all content fetches in parallel — each section independently reveals itself when it has data
   safeFetch('/api/specials').then(renderSpecials);
-  safeFetch('/api/weather').then(renderWeather);
+  safeFetch('/gravity-construction/api/weather.json').then(renderWeather);
   safeFetch('/api/projects?featured=1').then(renderProjects);
   safeFetch('/api/testimonials').then(renderTestimonials);
   safeFetch('/api/events').then(renderEvents);
   safeFetch('/api/posts').then(renderPosts);
-  safeFetch('/api/instagram').then(renderInstagram);
+  safeFetch('/gravity-construction/api/instagram.json').then(renderInstagram);
 
   // ---------- Carousel ----------
   document.querySelectorAll('[data-carousel]').forEach(function (root) {
